@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>Product Page Views Count</name>
+	<code>product-page-views-count</code>
+	<version>1.0.4</version>
+	<author>Bindez</author>
+	<link>http://myandeco.com</link>							 
+	<file path="catalog/view/theme/*/template/product/product.twig">
+		<operation>
+			<search><![CDATA[<li><strong>{{ text_stock }}</strong> {{ stock }}</li>]]></search>
+			<add position="after"><![CDATA[		
+			<li>{% if (view < 2) %}
+				<strong>Viewed <span style="color: #F23333;"> {{view}} Time</span></strong>
+			{% else %}
+				<strong>Viewed: <span style="color: #F23333;"> {{view}} Times</span></strong>
+			{% endif %}
+			</li>
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA[$this->load->model('tool/image');]]></search>
+			<add position="after"><![CDATA[		
+            $data['view'] = $product_info['viewed'];
+			]]></add>
+		</operation>
+	</file>
+</modification>

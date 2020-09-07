@@ -1,0 +1,107 @@
+<modification>
+	<name><![CDATA[<font color="#0000"><b>Show Product Dimension, Weight, Location</b></font>]]></name>
+	<version><![CDATA[<b>1.0</b>]]></version>
+	<author><![CDATA[<font color="#CC0000"><b>Bindez</font>]]></author>
+	<link><![CDATA[www.myandeco.com]]></link>
+	<code>show-product-dimension-weight-location</code>
+	
+	<file path="catalog/model/catalog/product.php">
+		<operation>
+			<search><![CDATA['length_class_id'  => $query->row['length_class_id'],]]></search>
+			<add position="after"><![CDATA[
+			'length_class' => $query->row['length_class'],
+			'weight_class' => $query->row['weight_class'],
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search ><![CDATA[$data['model'] =]]></search>
+			<add position="before"><![CDATA[			
+			if ($product_info['length'] != '0') {
+				$data['length'] = round($product_info['length'], 2) . $product_info['length_class'];
+			} else {
+				$data['length'] = NULL;
+			}
+			if ($product_info['width'] != '0') {
+				$data['width'] = round($product_info['width'], 2) . $product_info['length_class'];
+			} else {
+				$data['width'] = NULL;
+			}
+			if ($product_info['height'] != '0') {
+				$data['height'] = round($product_info['height'], 2) . $product_info['length_class'];
+			} else {
+				$data['height'] = NULL;
+			}
+			if ($product_info['weight'] != '0') {
+				$data['weight'] = round($product_info['weight'], 2) . $product_info['weight_class'];
+			} else {
+				$data['weight'] = NULL;
+			}
+			if ($product_info['location'] != null) {
+				$data['location'] = $product_info['location'];
+			} else {
+				$data['location'] = NULL;
+			}
+			]]></add>
+		</operation>
+		<operation>
+			<search ><![CDATA[$this->data['text_manufacturer'] =]]></search>
+			<add position="before"><![CDATA[			
+			$this->data['text_dimensions'] = $this->language->get('text_dimensions');
+			$this->data['text_by'] = $this->language->get('text_by');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/en-gb/product/product.php">
+		<operation>
+			<search ><![CDATA[$_['text_reward']]]></search>
+			<add position="before"><![CDATA[
+			$_['text_dimensions'] = 'Dimensions: ';
+			$_['text_by'] = '&nbsp;x&nbsp;';
+			$_['text_weight'] = 'Weight: ';
+			$_['text_location'] = 'Location: ';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/mm/product/product.php">
+		<operation>
+			<search ><![CDATA[$_['text_reward']]]></search>
+			<add position="before"><![CDATA[
+			$_['text_dimensions'] = 'အရွယ်အစား ';
+			$_['text_by'] = '&nbsp;x&nbsp;';
+			$_['text_weight'] = 'အလေးချိန် ';
+			$_['text_location'] = 'တည်နေရာ ';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/zh-tw/product/product.php">
+		<operation>
+			<search><![CDATA[$_['text_reward']]]></search>
+			<add  position="before"><![CDATA[
+			$_['text_dimensions'] = '尺寸图: ';
+			$_['text_by'] = '&nbsp;x&nbsp;';
+			$_['text_weight'] = '重量: ';
+			$_['text_location'] = '位置: ';
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/product/product.twig">
+		<operation>
+			<search><![CDATA[<li><strong>{{ text_model }}</strong> <span itemprop="mpn">{{ model }}</span></li>]]></search>
+			<add position="after"><![CDATA[
+			{% if( length or height or width ) %}
+				<li><strong>{{ text_dimensions }}</strong> <span itemprop="mpn">
+					{% if (length) %} L: {{ length }} {{text_by}} {% endif %} 
+					{% if (width) %} W: {{width}} {{text_by}} {% endif %} 
+					{% if (height) %} H: {{height}} {% endif %}</span>
+				</li>
+			{% endif %}
+			{% if(location) %}
+				<li><strong>{{ text_location }}</strong><span itemprop="mpn">{{location}}</span></li>
+			{% endif %}
+			]]></add>
+		</operation>
+	</file>
+</modification>

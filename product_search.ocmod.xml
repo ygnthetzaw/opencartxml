@@ -1,0 +1,35 @@
+<modification>
+	<name>Myandeco Product Search</name>
+	<version>1.0</version>
+	<author><font color="#CC0000"><b>Bindez</b></font></author>
+	<link>www.myandeco.com</link>
+	<code>myandeco-product-search</code>
+	
+	<file path="catalog/model/catalog/product.php">
+		<operation>
+			<search><![CDATA[$sql .= " OR LCASE(p.model) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " OR LCASE(REPLACE(p.model,' ', '')) = '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "'";
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="admin/model/catalog/product.php">
+		<operation>
+			<search><![CDATA[if (!empty($data['filter_name'])) {]]></search>
+			<add position="replace" offset="2"><![CDATA[
+			if (!empty($data['filter_name'])) {
+							$sql .= " AND pd.name LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
+			}
+			]]></add>
+		</operation>
+		<operation>				
+                <search ><![CDATA[if (!empty($data['filter_model'])) {]]></search>
+                <add position="replace" offset="2"><![CDATA[
+				if (!empty($data['filter_model'])) {
+					$sql .= " AND p.model LIKE '%" . $this->db->escape($data['filter_model']) . "%'";
+				}
+                ]]></add>
+        </operation>
+	</file>
+</modification>

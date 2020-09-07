@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Show Full Option Price</id>
+	<version>1.1</version>
+	<vqmver>2.5.1</vqmver>
+	<author>Bindez</author>
+	<file name="catalog/controller/product/product.php">		
+		<operation info="3.x" error="log">
+			<search position="after"><![CDATA[
+			foreach ($option['product_option_value'] as $option_value) {
+			]]></search>
+			<add><![CDATA[
+			if ($option_value['price_prefix'] == '-') {
+				$option_value['price'] = (($product_info['special'] ? ($product_info['special'] - $option_value['price']) : ($product_info['price']) - $option_value['price']));
+			} elseif ($option_value['price_prefix'] == '+') {
+				$option_value['price'] = (($product_info['special'] ? ($product_info['special'] + $option_value['price']) : ($product_info['price']) + $option_value['price']));
+			}
+			$option_value['price_prefix'] = '';
+			]]></add>
+		</operation>
+	</file>
+</modification>
+
+
+
+ 
