@@ -1,8 +1,8 @@
 <modification>
 	<name><![CDATA[<font color="#0000"><b>Show Product Dimension, Weight, Location</b></font>]]></name>
 	<version><![CDATA[<b>1.0</b>]]></version>
-	<author><![CDATA[<font color="#CC0000"><b>Bindez</font>]]></author>
-	<link><![CDATA[www.myandeco.com]]></link>
+	<author><![CDATA[<font color="#CC0000"><b>Innosoft</font>]]></author>
+	<link><![CDATA[www.innosoftmm.com]]></link>
 	<code>show-product-dimension-weight-location</code>
 	
 	<file path="catalog/model/catalog/product.php">
