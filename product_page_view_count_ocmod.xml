@@ -4,7 +4,7 @@
 	<code>product-page-views-count</code>
 	<version>1.0.4</version>
 	<author>Innosoft</author>
-	<link>http://www.innosoft.com</link>							 
+	<link>http://www.innosoftmm.com</link>							 
 	<file path="catalog/view/theme/*/template/product/product.twig">
 		<operation>
 			<search><![CDATA[<li><strong>{{ text_stock }}</strong> {{ stock }}</li>]]></search>
