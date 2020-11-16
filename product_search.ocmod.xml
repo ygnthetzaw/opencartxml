@@ -1,9 +1,9 @@
 <modification>
-	<name>Myandeco Product Search</name>
+	<name>Product Search</name>
 	<version>1.0</version>
 	<author><font color="#CC0000"><b>Bindez</b></font></author>
-	<link>www.myandeco.com</link>
-	<code>myandeco-product-search</code>
+	<link>www.innosoftmm.com</link>
+	<code>product-search</code>
 	
 	<file path="catalog/model/catalog/product.php">
 		<operation>
