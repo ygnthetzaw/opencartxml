@@ -3,7 +3,7 @@
 	<id>Show Full Option Price</id>
 	<version>1.1</version>
 	<vqmver>2.5.1</vqmver>
-	<author>Bindez</author>
+	<author>Innosoft</author>
 	<file name="catalog/controller/product/product.php">		
 		<operation info="3.x" error="log">
 			<search position="after"><![CDATA[
