@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<modification>
+		<name>CBM Currency</name>
+		<code>cbm_currency</code>
+		<version>1</version>
+		<author>Innosoft</author>
+		<link>https://www.innosoftmm.com/</link>
+		<file path="admin/model/localisation/currency.php">
+		
+			<!-- removing the old function by rename -->
+			<operation>
+				<search><![CDATA[
+					public function refresh($force = false) {
+				]]></search>
+				<add position="replace"><![CDATA[
+					public function oldRefresh() {
+				]]></add>
+			</operation>
+			
+			<!-- adding the updated function -->
+			<operation>
+				<search><![CDATA[
+					public function getTotalCurrencies() {
+				]]></search>
+				<add position="before"><![CDATA[
+					public function refresh($force = false) {
+						$currency_data = array();
+
+						$default = $this->config->get('config_currency');
+
+						if ($force) {
+							$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "'");
+						} else {
+							$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "' AND date_modified < '" .  $this->db->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "'");
+						}
+
+						foreach ($query->rows as $result) {
+							if (($result['code'] != $default)) {
+								$currency_data[] = $result;
+							}
+						}
+
+						if($currency_data){
+
+							$curl = curl_init();
+
+							curl_setopt($curl, CURLOPT_URL, 'https://forex.cbm.gov.mm/api/latest');
+							curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+							curl_setopt($curl, CURLOPT_HEADER, false);
+							curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+							curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+							curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+
+							$response = curl_exec($curl);
+							
+							curl_close($curl);
+
+							$responseData = json_decode($response,true);
+
+							if (isset($responseData['rates'])) {
+								foreach ($currency_data as $currency) {
+									if (isset($responseData['rates'][$currency['code']])) {
+										$rate = str_replace(",","",$responseData['rates'][$currency['code']]);
+										$rate = (float)$rate;
+										$code = $this->db->escape((string)$currency['code']);
+										$this->db->query("UPDATE " . DB_PREFIX . "currency SET value = '" . $rate . "', date_modified = '" .  $this->db->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" .$code. "'");
+									}
+								}
+							}
+							$this->cache->delete('currency');
+						}
+						$this->db->query("UPDATE " . DB_PREFIX . "currency SET value = '1.00000', date_modified = '" .  $this->db->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->db->escape($this->config->get('config_currency')) . "'");
+					}
+				]]></add>
+			</operation>
+		</file>
+	</modification>
+
